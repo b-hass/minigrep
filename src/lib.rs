@@ -13,7 +13,7 @@ Rust is
 much better than
 C++.";
         assert_eq!(
-            vec!("much", "better", "than"),
+            vec!("much better than"),
             search(query, contents)
         );
     }
@@ -38,11 +38,22 @@ impl Config {
 }
 
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-       let contents = fs::read_to_string(&config.filename)?;
-
-       Ok(())
+    let contents = fs::read_to_string(&config.filename)?;
+    for line in search(&config.query, &contents) {
+        println!("{}", line);
+    }
+      
+    Ok(())
 }
 
 fn search <'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    vec![]
+    let mut results = Vec::new();
+    
+    for line in contents.lines() {
+        if line.contains(query) {
+            results.push(line);
+        }
+    }
+
+    results
 }
