@@ -1,0 +1,2 @@
+# minigrep
+Simplified grep
