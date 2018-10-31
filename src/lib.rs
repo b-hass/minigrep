@@ -6,7 +6,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn one_result() {
+    fn case_sensitive() {
         let query = "bett";
         let contents = "\
 Rust is
@@ -17,6 +17,19 @@ C++.";
             search(query, contents)
         );
     }
+}
+
+#[test]
+fn case_insensitive() {
+    let query = "BeTt";
+    let contents = "\
+Rust is
+much better than
+C++.";
+    assert_eq!(
+        vec!("much better than"),
+        search_case_insensitive(query, contents)
+    );
 }
 
 pub struct Config {
@@ -51,6 +64,19 @@ fn search <'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     
     for line in contents.lines() {
         if line.contains(query) {
+            results.push(line);
+        }
+    }
+
+    results
+}
+
+fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    let query = query.to_lowercase();
+    let mut results = Vec::new();
+    
+    for line in contents.lines() {
+        if line.to_lowercase().contains(&query) {
             results.push(line);
         }
     }
